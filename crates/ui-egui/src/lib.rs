@@ -226,6 +226,7 @@ pub mod text_field_menu;
 pub mod theme;
 pub mod tiff_options_ui;
 mod tile_overlay;
+pub mod tm;
 mod timeline_ui;
 mod titlebar;
 pub use titlebar::{Caption, CaptionFamily, CaptionIcon, CaptionIcons, CaptionStyle, RenderIconFn};

@@ -147,6 +147,9 @@ pub(crate) fn invoke_unguarded(app: &mut PhotocraftApp, ctx: &egui::Context, id:
     if let Some(r) = crate::plugin_ui::menu(app, id, &params) {
         return r;
     }
+    if let Some(r) = crate::tm::calistir(app, ctx, id) {
+        return r;
+    }
     if id == "window.panel.brushSettings" {
         app.ui.brush_tab = 0;
     }
@@ -716,6 +719,9 @@ pub fn is_enabled(app: &PhotocraftApp, id: &str) -> bool {
     if let Some(e) = crate::plugin_ui::is_enabled(app, id) {
         return e;
     }
+    if let Some(e) = crate::tm::etkin_mi(app, id) {
+        return e;
+    }
     if let Some(e) = crate::transform_tool::is_enabled(app, id) {
         return e;
     }
@@ -1008,6 +1014,7 @@ pub fn menu_items(app: &PhotocraftApp) -> Vec<MenuItem> {
     {
         item.label = "Merge Group".into();
     }
+    crate::tm::menu_ogeleri(app, &mut items);
     // The File quick-export command uses the format selected in Export Preferences.
     // On the web it intentionally downloads PNG until the quick-export service supports
     // the other formats; the Layer quick-export command also always produces PNG.

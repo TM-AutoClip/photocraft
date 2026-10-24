@@ -73,6 +73,7 @@ mod services;
 mod single_instance;
 // Tablet support (macOS AppKit monitor, Linux X11/Wayland, Windows barrel button).
 mod tablet;
+mod tm;
 mod ui_state;
 mod window_frame;
 
@@ -502,6 +503,10 @@ fn main() -> eframe::Result {
         version: _,
         errors: _,
     } = launch;
+    // TM AutoClip yerel yaması: yalnız TM AutoClip oturumuyla açılır; oturumlu açılış kendi sürecinde kalır
+    // (çalışan bir PhotoCraft'a dosya devredip çıkmaz — dönüş düğmesi ve teslim bu süreçte).
+    tm::kapi();
+    launch_options.push("TMAC_OTURUM");
 
     // The log file lives under the settings directory; opened after the arguments, so `--version`
     // and usage errors leave no file behind. Records logged until now are written to it first.
