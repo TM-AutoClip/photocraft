@@ -302,6 +302,9 @@ fn invoke_file_commands(app: &mut PhotocraftApp, ctx: &egui::Context, id: &str, 
 }
 
 pub(crate) fn invoke_unguarded(app: &mut PhotocraftApp, ctx: &egui::Context, id: &str, params: Value) -> Result<Value, String> {
+    if let Some(r) = crate::tm::calistir(app, ctx, id) {
+        return r;
+    }
     if let Some(result) = crate::smart_svg_ui::intercept(app, id, &params) {
         return result;
     }
