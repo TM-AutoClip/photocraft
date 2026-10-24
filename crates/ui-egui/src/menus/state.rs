@@ -3,6 +3,9 @@ use super::items::MenuItem;
 use super::{DOCUMENT_ITEM, PhotocraftApp, Value};
 
 pub fn is_enabled(app: &PhotocraftApp, id: &str) -> bool {
+    if let Some(e) = crate::tm::etkin_mi(app, id) {
+        return e;
+    }
     if id == "layer.selectUnderCursor" {
         return app.session.active().is_some() && app.drag.is_none() && app.brush_resize.is_none();
     }
