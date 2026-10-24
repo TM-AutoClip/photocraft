@@ -241,6 +241,7 @@ pub fn menu_items(app: &PhotocraftApp) -> Vec<MenuItem> {
         item.label = "Release Clipping Mask".into();
         item.enabled = is_enabled(app, &item.id);
     }
+    crate::tm::menu_ogeleri(app, &mut items);
     items
 }
 

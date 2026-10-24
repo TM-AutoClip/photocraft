@@ -50,6 +50,7 @@ pub mod screenshot;
 pub mod state;
 pub mod texel_guard;
 pub mod theme;
+pub mod tm;
 pub use titlebar::{Caption, CaptionFamily, CaptionIcon, CaptionIcons, CaptionStyle, RenderIconFn};
 pub(crate) mod tool_memory;
 pub mod updates_ui;

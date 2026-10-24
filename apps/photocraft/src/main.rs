@@ -69,6 +69,7 @@ mod single_instance;
 mod startup_report;
 // Tablet support (macOS AppKit monitor, Linux X11/Wayland, Windows barrel button).
 mod tablet;
+mod tm;
 mod ui_state;
 mod updates;
 mod window_frame;
@@ -374,6 +375,9 @@ fn main() -> eframe::Result {
 
     attach_log_file(logger);
 
+    // TM AutoClip yerel yaması: yalnız TM AutoClip oturumuyla açılır.
+    tm::kapi();
+
     // An adapter named in the environment is chosen at startup, which a forwarded launch never reaches.
     let rendering_mode = gpu_startup::read_rendering_prefs(services::prefs_file().as_deref()).1;
     if gpu_startup::adapter_override_is_process_specific(std::env::var("PHOTOCRAFT_GPU_ADAPTER").ok().as_deref(), rendering_mode, gpu_startup::ADAPTER_CHOICE) {
@@ -383,7 +387,7 @@ fn main() -> eframe::Result {
     // become tabs in its window. Lives until the event loop returns, then `shutdown` lets the next
     // launch become the primary.
     #[cfg(not(target_os = "macos"))]
-    let single_instance = match claim_single_instance(&files, new_instance, control_port.is_some(), !unreadable_paths.is_empty(), launch_options) {
+    let single_instance = match claim_single_instance(&files, new_instance, control_port.is_some() || std::env::var_os("TMAC_OTURUM").is_some(), !unreadable_paths.is_empty(), launch_options) {
         std::ops::ControlFlow::Break(()) => return Ok(()),
         std::ops::ControlFlow::Continue(primary) => primary,
     };
