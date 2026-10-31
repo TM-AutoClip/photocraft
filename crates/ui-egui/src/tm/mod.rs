@@ -1,5 +1,5 @@
 //! TM AutoClip yerel yaması — PhotoCraft (11 Eki 2026). Upstream'e dokunuş: `lib.rs` → `pub mod tm;`,
-//! `menus.rs` → üç çağrı satırı (menü öğeleri, çalıştırma, etkinlik), `apps/photocraft/src/main.rs` → açılış kapısı.
+//! `menus/{items,invoke,state}.rs` → üç çağrı satırı (menü öğeleri, çalıştırma, etkinlik), `apps/photocraft/src/main.rs` → açılış kapısı.
 //!
 //! - Akış kipinde (TM AutoClip'in Görsel Üretim akışından açılış) Dosya menüsünde "Kaydet ve TM AutoClip'e dön":
 //!   etkin belgeyi oturumun beklenen çıktı yoluna kaydeder (eşzamanlı), `teslim.json` yazar, programı kapatır.
