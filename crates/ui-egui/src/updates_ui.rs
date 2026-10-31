@@ -69,7 +69,7 @@ pub(crate) fn tick(app: &mut PhotocraftApp, ctx: &egui::Context) {
     }
     if !app.updates_rt.startup_checked {
         app.updates_rt.startup_checked = true;
-        if app.session.prefs().general.automatically_check_updates && matches!(app.session.updates.status, Status::Idle) {
+        if crate::tm::oturum::simdiki().is_none() && app.session.prefs().general.automatically_check_updates && matches!(app.session.updates.status, Status::Idle) {
             let _ = app.run("help.checkForUpdates", serde_json::json!({}));
         }
     }
