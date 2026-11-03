@@ -3,7 +3,7 @@
 //!
 //! - Akış kipinde (TM AutoClip'in Görsel Üretim akışından açılış) Dosya menüsünde "Kaydet ve TM AutoClip'e dön":
 //!   etkin belgeyi oturumun beklenen çıktı yoluna kaydeder (eşzamanlı), `teslim.json` yazar, programı kapatır.
-//! - Düz kipte (sol menüden açılış) bu öğe GİZLİ; kullanıcı serbest.
+//! - Düz kipte ve oturumsuz açılışta bu öğe GİZLİ; kullanıcı serbest.
 //! - `craft-marka.json` linkleri (yalnız https) Yardım menüsünde PhotoCraft'ın kendi Discord öğesinin YANINA eklenir.
 
 pub mod oturum;
@@ -13,6 +13,9 @@ use serde_json::{Value, json};
 use crate::PhotocraftApp;
 use crate::menus::MenuItem;
 
+/// Açılışta güncelleme denetimi (yamalı sürüm TM AutoClip'in araç listesinde sabit; upstream'in resmî sürümü yamasızdır).
+/// Oturumlu da oturumsuz da kapalı; Yardım ▸ Check for Updates elle çalışır.
+pub const ACILIS_GUNCELLEME_DENETIMI: bool = false;
 /// Bu programın oturumdaki adı.
 pub const PROGRAM: &str = "photocraft";
 /// "Kaydet ve TM AutoClip'e dön" komut kimliği.
