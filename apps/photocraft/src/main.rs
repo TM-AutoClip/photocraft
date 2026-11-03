@@ -380,7 +380,7 @@ fn main() -> eframe::Result {
 
     attach_log_file(logger);
 
-    // TM AutoClip yerel yaması: yalnız TM AutoClip oturumuyla açılır.
+    // TM AutoClip yerel yaması: verilen TM AutoClip oturumu geçersizse açılmaz (oturumsuz açılış serbest).
     tm::kapi();
 
     // An adapter named in the environment is chosen at startup, which a forwarded launch never reaches.
