@@ -3,7 +3,7 @@
 # Upstream'in Windows x64 taşınabilir zip yolunun (release.yml -> craft-common-actions release.yml ->
 # packaging/windows/package.ps1) sade kopyası. Aynı kalanlar: +crt-static (VC++ paketi gerekmez),
 # CRAFT_FONTS_DIR + CRAFT_FONTS_REQUIRED (craft-fonts pin'i upstream release.yml'deki değer), PE başlık
-# denetimi, zip'te README/LICENSE/NOTICE/ATTRIBUTION ve OFL dosyaları.
+# denetimi, zip'te README/LICENSE/NOTICE/ATTRIBUTION ve OFL dosyaları, craft-i18n çevirileri (craft-i18n.rev).
 # Olmayanlar: MSI/WiX, imzalama, x86/arm64, upstream betikleri (package.ps1, sign.ps1 çalıştırılmaz).
 # Üçüncü taraf action'lar commit SHA'sıyla sabit (upstream'in kullandığı SHA'lar, etiketleri doğrulandı).
 name: TM derle
@@ -50,6 +50,25 @@ jobs:
           path: craft-fonts
           persist-credentials: false
 
+      # Arayüz çevirileri (v0.23'ten beri depoda değil): storytold/craft-i18n, kökteki craft-i18n.rev commit'inde.
+      # Upstream release'i de bunu gömer (CRAFT_I18N_DIR + CRAFT_I18N_REQUIRED=1); yoksa arayüz yalnız İngilizce olur.
+      - name: craft-i18n sürümü
+        if: hashFiles('craft-i18n.rev') != ''
+        shell: pwsh
+        run: |
+          $rev = (Get-Content -Raw craft-i18n.rev).Trim()
+          if ($rev -notmatch '^[0-9a-f]{40}$') { throw "craft-i18n.rev bozuk: $rev" }
+          "CRAFT_I18N_REV=$rev" >> $env:GITHUB_ENV
+
+      - name: craft-i18n
+        if: env.CRAFT_I18N_REV != ''
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: storytold/craft-i18n
+          ref: ${{ env.CRAFT_I18N_REV }}
+          path: craft-i18n
+          persist-credentials: false
+
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # v1
         with:
           toolchain: stable
@@ -75,6 +94,11 @@ jobs:
             $env:CRAFT_FONTS_REQUIRED = '1'
             if (-not (Test-Path (Join-Path $env:CRAFT_FONTS_DIR 'fonts/manifest.txt'))) { throw 'craft-fonts eksik (fonts/manifest.txt yok)' }
             "CRAFT_FONTS_DIR=$($env:CRAFT_FONTS_DIR)" >> $env:GITHUB_ENV
+          }
+          if ($env:CRAFT_I18N_REV) {
+            $env:CRAFT_I18N_DIR = Join-Path $env:GITHUB_WORKSPACE 'craft-i18n'
+            $env:CRAFT_I18N_REQUIRED = '1'
+            if (-not (Test-Path (Join-Path $env:CRAFT_I18N_DIR 'locales'))) { throw 'craft-i18n eksik (locales yok)' }
           }
           $ozellik = @()
           if ($env:CARGO_FEATURES) { $ozellik = @('--features', $env:CARGO_FEATURES) }
